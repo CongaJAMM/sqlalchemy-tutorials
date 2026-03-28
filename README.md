@@ -29,4 +29,5 @@ or just copy and paste the code
 - Episode 15: https://youtu.be/WsDVBEmTlaI
 - Episode 16: https://youtu.be/_cHSW_ehjtY
 - Episode 17: https://youtu.be/QWHsnoTwjzo
-- Episode 18: https://www.youtube.com/watch?v=jmjuaSVRWPY
+- Episode 18: https://youtu.be/jmjuaSVRWPY
+- Episode 19: https://youtu.be/YSFODnf_eoA
