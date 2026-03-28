@@ -9,3 +9,6 @@ presentations/
 example/
 a.txt
 .vscode
+.mailmap
+switch.sh
+**/title.PNG
