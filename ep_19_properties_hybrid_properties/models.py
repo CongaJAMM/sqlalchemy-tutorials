@@ -1,6 +1,5 @@
 from datetime import date
 
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import create_engine
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
