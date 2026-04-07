@@ -1,3 +1,6 @@
+-- SQL Under The Hood
+
+
 -- INNER JOIN
 SELECT *
 FROM users

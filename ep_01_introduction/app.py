@@ -10,7 +10,15 @@ from sqlalchemy.orm import declarative_base
 url_object = URL.create(
     'sqlite',
     database='ep_01_database.db',
-)
+) 
+# FORMAT:
+# "<dialect>+<driver>://<username>:<password>@<host>:<port>/<databasename>"
+
+# For an in-memory database:
+# url = "sqlite://:memory:"
+
+# For an database file:
+# url = "sqlite:///path/to/database.db"
 
 # Create an engine for a SQLite database
 engine = create_engine(url_object)

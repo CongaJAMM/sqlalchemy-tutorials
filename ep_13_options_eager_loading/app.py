@@ -4,6 +4,44 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=FI91w7z-CsI
 
+"""
+SQLAlchemy Query Options: Eager, Lazy, and Filtered Loading
+
+This module demonstrates how to use the 'sqlalchemy.orm' loading options to 
+control how related data is fetched. These options allow you to be 
+performant by batching requests or using SQL joins instead of multiple queries.
+
+--- CORE LOADING OPTIONS ---
+
+1. Eager Loading (Fetches data immediately):
+    - joinedload(): Uses a SQL JOIN (usually LEFT OUTER) to fetch related data 
+      in the same result set as the parent. BEST FOR 1:1 or N:1.
+    - selectinload(): Emits a second SELECT statement using an 'IN' clause 
+      containing the parent IDs. BEST FOR 1:N collections.
+    - subqueryload(): Emits a second SELECT using the original query as a 
+      subquery. (Legacy alternative to selectinload).
+    - immediateload(): Emits individual SELECT statements for every parent 
+      immediately. Useful for self-referential trees with a set 'depth'.
+
+2. Modification & Logic Options:
+    - defaultload(): Keeps the model's default loading behavior but allows you to 
+      chain further .options() onto the relationship's children.
+    - contains_eager(): Used when you manually write a .join() or .outerjoin(). 
+      It tells SQLAlchemy that the related data is already in the columns 
+      being fetched, allowing you to filter the parent based on the child.
+    - load_only(): A "column-level" optimization. It fetches only specific 
+      columns, deferring all others.
+
+--- KEY TAKEAWAYS ---
+- Used to overwrite the default loading behavior.
+- Use joinedload() for single-object relationships (User -> Profile).
+- Use selectinload() for list-based relationships (User -> Posts).
+- Use contains_eager() when you need to FILTER the parent results based 
+  on a child attribute (e.g., "Users who have a Post with ID 1").
+- Nesting: You can chain .options() to go deeper into the hierarchy, 
+  such as User -> Posts -> Details.
+"""
+
 from sqlalchemy import select
 from sqlalchemy.orm import (
     contains_eager,
@@ -18,19 +56,6 @@ from sqlalchemy.orm import (
 from models import Detail, Post, User, session
 
 
-# Loading Options:
-# defaultload()         - when you dont want to change the loading behavior but you
-#                         want to change something in the loaded items from the relationship
-
-# Eager loading: (Loaded right away)
-# joinedload()          - load related data with a join statement
-# subqueryload()        - loads data using a subquery
-# immediateload()       - loads everything in the relationship one by one, can add a recursion depth for self relationships
-#                         ex: followers / following relationships
-# selectinload()        - more efficient than `immediateload`,` creating one select statment for all related objects
-
-# Special:
-# contains_eager()  - allows filtering on related items
 
 # =============================================================================================
 # Default Loading
@@ -39,6 +64,8 @@ print('\nLoading from class structure')
 query = session.query(User)
 print(query)
 
+
+# Same as Above
 print('=' * 40)
 print('\nLoading with the: `defaultload` function')
 query = session.query(User).options(defaultload(User.posts))

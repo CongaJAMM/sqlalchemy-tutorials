@@ -2,15 +2,15 @@
 
 Here will be a list of tutorials for anyone following along with my videos on https://www.youtube.com/channel/UCozQC0krHyRC9TSbQPsQyxA
 
-To get started, type:
+* Used WSL Debian terminal
 
-`git clone https://github.com/ZeqTech/sqlalchemy-tutorials.git`
-
-or just copy and paste the code
+* Used 'alc_env' conda environment from 'D:/sqlalchemy/setup`
 
 ---
 
 ## Videos with Links:
+
+- Main YouTube Playlist: https://www.youtube.com/playlist?list=PLKm_OLZcymWhtiM-0oQE2ABrrbgsndsn0
 
 - Episode 1:   https://youtu.be/Z2zD3EdjpNo
 - Episode 2:   https://youtu.be/f0-kEG37GE0

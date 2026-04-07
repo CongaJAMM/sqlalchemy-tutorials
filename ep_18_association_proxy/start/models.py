@@ -6,7 +6,6 @@
 
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy.ext.associationproxy import association_proxy
 
 
 class Base(DeclarativeBase):
@@ -25,10 +24,9 @@ class User(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     articles: Mapped[list['Article']] = relationship(
-        back_populates='users', secondary='user_article'
+        back_populates='users',
+        secondary='user_article'
     )
-
-    article_titles: list[str] = association_proxy('articles', 'title')
 
 
 class Article(Base):
@@ -36,6 +34,6 @@ class Article(Base):
 
     title: Mapped[str] = mapped_column(String(100))
     users: Mapped[list[User]] = relationship(
-        back_populates='articles', secondary='user_article'
+        back_populates='articles',
+        secondary='user_article'
     )
-    usernames: list[str] = association_proxy('users', 'name')

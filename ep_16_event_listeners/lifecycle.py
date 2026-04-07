@@ -4,6 +4,61 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=_cHSW_ehjtY
 
+"""Example #4
+
+SQLAlchemy Event Lifecycle: Deep Dive & Execution Order
+
+This module serves as a diagnostic tool to visualize the exact sequence of 
+events triggered during standard ORM operations. It covers three distinct 
+layers of the SQLAlchemy ecosystem:
+
+
+    Event #1 Flush w/ Commit
+        session.flush()
+            before_flush -> before_insert/before_update/before_delete -> before_execute -> 
+                after_execute -> after_insert/after_update/after_delete -> after_flush ->
+                after_flush_postexec
+
+        session.commit()   
+                -> before_commit -> after_commit
+
+        session.rollback()
+            after_rollback
+
+    Event #2 Commit Only
+        session.commit()
+            before_commit -> before_flush -> before_insert/before_update/before_delete -> 
+                before_execute -> after_execute -> after_insert/after_update/after_delete ->
+                after_flush -> after_flush_postexec -> after_commit
+                
+        session.rollback()
+            after_rollback
+
+    Event #3 Query on the Database w/out Inserting, Updating, or Deleting
+        session.query()/session.execute()/session.scalar()
+            before_execute -> after_execute
+        session.rollback()
+            after_rollback
+
+            
+1. Engine Events (The Bottom Layer):
+   Intercepts raw SQL execution. These events ('before_execute', 'after_execute') 
+   fire whenever the database driver is asked to perform a task.
+
+2. Session Events (The Middle Layer):
+   Manages the transaction lifecycle. These hooks ('before_flush', 'after_commit', 
+   'after_rollback') are critical for managing external side-effects like 
+   clearing caches or sending emails once a transaction is finalized.
+
+3. Mapper/Object Events (The Top Layer):
+   Hooks into the specific life of an object. These ('before_insert', 'after_update') 
+   fire as the Session translates Python objects into SQL rows.
+
+Key Learning Objective:
+By observing the print output, you can see how a single 'session.commit()' 
+actually triggers a cascade of events:
+Flush -> Before/After Insert -> Engine Execute -> Postexec -> Before/After Commit.
+"""
 
 from sqlalchemy import create_engine, event, select
 from sqlalchemy.orm import sessionmaker, mapped_column, Mapped, DeclarativeBase
@@ -12,11 +67,15 @@ engine = create_engine('sqlite:///:memory:')
 
 
 class Base(DeclarativeBase):
+    """Base model providing primary key structure."""
     id: Mapped[int] = mapped_column(primary_key=True)
 
 
 # Define a simple User model
 class User(Base):
+    """
+    Represents the 'users' table. Used as the target for Mapper events.
+    """
     __tablename__ = 'users'
     name: Mapped[str] = mapped_column(unique=True)
 
@@ -28,8 +87,12 @@ session = Session()
 
 # Event Listener Functions
 def log_event(name):
-    """Decorator to log SQLAlchemy events"""
-
+    """
+    A decorator factory that creates a listener function for any event.
+    
+    Args:
+        name (str): The name of the event to be printed when triggered.
+    """
     def wrapper(*args, **kwargs):
         print(f'🔹 {name} triggered!')
 

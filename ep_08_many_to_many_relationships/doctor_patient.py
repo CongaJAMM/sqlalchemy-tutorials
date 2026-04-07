@@ -4,6 +4,30 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=iosh_DWnliE
 
+"""Example #3
+
+Doctor-Patient Many-to-Many Relationship Module (Association MODEL Pattern)
+
+This module demonstrates a Many-to-Many relationship implemented via an 
+explicit Association Class. This pattern is used when the relationship 
+between two entities (Doctor and Patient) carries its own attributes.
+
+Key Concepts:
+1. Association Object Pattern: 
+   Instead of a simple link table, 'Appointment' acts as a middle-man 
+   containing Foreign Keys to both 'Doctor' and 'Patient'.
+
+2. Relationship with Extra Data: 
+   The 'appointments' table stores more than just IDs; it stores 
+   'appointment_date' and 'notes', which belong specifically to the 
+   interaction between a doctor and a patient.
+
+3. backref vs back_populates: 
+   This module uses 'backref', which is a shortcut that automatically 
+   declares the relationship on the related class (Doctor and Patient) 
+   without having to write it manually in those classes.
+"""
+
 from datetime import datetime
 
 from sqlalchemy import Column, Date, ForeignKey, Integer, String, create_engine
@@ -20,6 +44,23 @@ Base = declarative_base()
 
 
 class Appointment(Base):
+    """
+    The Association MODEL representing the link between Doctors and Patients.
+    
+    This class functions as the 'Center' of the Many-to-Many relationship.
+    
+    Attributes:
+        doctor_id (FK): Links to the specific Doctor.
+        patient_id (FK): Links to the specific Patient.
+        appointment_date (Date): The specific time the interaction occurs.
+        notes (String): Medical or administrative notes for this specific visit.
+
+    ORM Attributes:
+        doctor (relationship): Accesses the Doctor object. Creates an 
+                               '.appointments' list on the Doctor class via backref.
+        patient (relationship): Accesses the Patient object. Creates an 
+                                '.appointments' list on the Patient class via backref.
+    """
     __tablename__ = 'appointments'
     id = Column(Integer, primary_key=True)
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
@@ -35,6 +76,12 @@ class Appointment(Base):
 
 
 class Doctor(Base):
+    """
+    Represents the 'doctors' table.
+    
+    Through the Appointment backref, this class dynamically gains an 
+    '.appointments' attribute which returns a list of Appointment objects.
+    """
     __tablename__ = 'doctors'
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -42,6 +89,12 @@ class Doctor(Base):
 
 
 class Patient(Base):
+    """
+    Represents the 'patients' table.
+    
+    Through the Appointment backref, this class dynamically gains an 
+    '.appointments' attribute which returns a list of Appointment objects.
+    """
     __tablename__ = 'patients'
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -50,7 +103,7 @@ class Patient(Base):
 
 Base.metadata.create_all(engine)
 
-# If there is data in the database, dont add more data
+# If there is data in the database, don't add more data
 if session.query(Appointment).count() < 1:
     dr_smith = Doctor(name='Dr. Smith', specialty='Cardiology')
     john_doe = Patient(name='John Doe', dob=datetime(1990, 1, 1))

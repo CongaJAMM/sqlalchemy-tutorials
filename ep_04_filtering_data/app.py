@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# If there is data in the database, dont add more data
+# If there is data in the database, don't add more data
 if session.query(User).count() < 1:
     session.add(User(name='Iron Man', age=23))
     session.add(User(name='Coding Man', age=56))
@@ -31,13 +31,16 @@ print('\nFILTER')
 users_filtered = session.query(User).filter(User.age >= 25).all()
 print('Filtered Users:', len(users_filtered))
 
+
 # ========================================================================================
 print('\nFILTER BY')
 # query all users with age is equal to 30
+# NO CONDITIONALS ALLOWED!!!
 users = session.query(User).filter_by(age=30).all()
 
 for user in users:
     print(f'User age: {user.age}')
+
 
 # ========================================================================================
 print('\nWHERE')
@@ -47,14 +50,16 @@ users = session.query(User).where(User.age >= 30).all()
 for user in users:
     print(f'User age: {user.age}')
 
+
 # ========================================================================================
 print('\nOR')
-# query all users with age is greater than or equal to 30 or name is 'Iron Man'
+# query all users with age is greater than or equal to 30 OR name is 'Iron Man'
 users = session.query(User).where(or_(User.age >= 30, User.name == 'Iron Man')).all()
 print(f'Users: {len(users)}')
 
 users = session.query(User).where((User.age >= 30) | (User.name == 'Iron Man')).all()
 print(f'Users: {len(users)}')
+
 
 # ========================================================================================
 print('\nAND')
@@ -63,12 +68,14 @@ users = session.query(User).where(and_(User.age >= 30, User.name == 'Iron Man'))
 
 print(f'Users: {len(users)}')
 
+
 # ========================================================================================
 print('\nNOT')
 # query all users where the name is not 'Iron Man'
 users = session.query(User).where(not_(User.name == 'Iron Man')).all()
 
 print(f'Users: {len(users)}')
+
 
 # ========================================================================================
 print('\nCOMBINE OPTIONS')

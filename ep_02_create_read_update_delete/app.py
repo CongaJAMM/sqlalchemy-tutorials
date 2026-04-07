@@ -7,13 +7,14 @@
 from models import User, engine
 from sqlalchemy.orm import sessionmaker
 
-Session = sessionmaker(bind=engine)
-session = Session()
+Session = sessionmaker(bind=engine)  # Create the Session Factory
+session = Session()  # Use the Factory to create a SQLAlchemy ORM Session
+
 
 # ===================================================================================
 # CREATE
 
-# If there is data in the database, dont add more data
+# If there is data in the database, don't add more data
 if session.query(User).count() < 1:
     # Create one new User
     user = User(name='John Doe 1', age=30)
@@ -29,7 +30,8 @@ if session.query(User).count() < 1:
     session.add(user_1)
     session.add(user_2)
     session.add_all([user_3, user_4])
-    session.commit()
+    session.commit()  # Saves to the Database
+
 
 # ===================================================================================
 # READ
@@ -63,9 +65,38 @@ user = users[0]
 user.name = 'Jane Doe'
 session.commit()
 
+
 # ===================================================================================
 # DELETE
 # delete a user record
 user = users[0]
 session.delete(user)
 session.commit()
+
+
+
+# ===================================================================================
+# QUERY OBJECT
+print(f"\n\nUnderstanding the QUERY OBJECT:")
+users = session.query(User)   # This does NOT query/hit the database yet.
+    # It returns a Query object (a lazy SQL builder).
+
+print(f"This is the return type: {type(users)}")
+
+# Can chain operations to build the query
+
+users = users.order_by(User.id.desc())      # Still no SQL executed yet!!
+users = users.limit(5)                      # Still no SQL executed yet!!
+
+
+# The database is only hit WHEN YOU CALL A TERMINAL METHOD:
+"""
+users.all()      # → returns list[User]
+users.first()    # → returns one User or None
+users.one()      # → exactly one or raises error
+users.count()    # → returns integer
+users.scalar()   # → returns single value
+"""
+
+result = users.all()        # NOW SQL EXECUTES THE QUERY
+print(f"Result of the query chain: \n{result}")

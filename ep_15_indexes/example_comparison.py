@@ -4,9 +4,36 @@
 # =============================================================
 # https://www.youtube.com/watch?v=WsDVBEmTlaI
 
-# This file will show you a comparison of having vs not having an index
-# and how it affects reading data and writing data from a database
+"""Example #4
 
+SQLAlchemy Performance Benchmarking: The Impact of Database Indexing
+
+This module compares two identical tables—one with a B-Tree index and one 
+without—to measure the real-world performance delta between them. 
+
+Key Concepts:
+1. Retrieval Speed (The Gain):
+   Without an index, the database must perform a 'Full Table Scan' (O(N)), 
+   checking every single row. With an index, the database uses a 
+   highly optimized search structure (O(log N)), allowing it to find 
+   specific records almost instantly.
+
+2. Insertion Overhead (The Cost):
+   Every time a row is added to an indexed table, the database must 
+   also update the index tree. This requires additional CPU cycles and 
+   Disk I/O, making bulk inserts measurably slower.
+
+3. Optimization Balance:
+   Indexing should be applied strategically to columns frequently used 
+   in WHERE clauses, JOINs, or ORDER BY statements, but avoided on 
+   write-heavy tables where read performance is not a priority.
+
+Benchmarking Workflow:
+- Bulk insert 500,000 rows into both tables.
+- Measure and compare the time taken for 'insert_data'.
+- Query a specific record from both tables.
+- Measure and compare the time taken for 'fetch_data'.
+"""
 
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column, Session
 from sqlalchemy import create_engine, String, Sequence
@@ -20,15 +47,36 @@ engine = create_engine('sqlite:///example.db', echo=False)
 
 
 class Base(DeclarativeBase):
+    """
+    Standard Declarative Base for SQLAlchemy 2.0.
+    
+    Attributes:
+        id (Mapped[int]): A primary key using a Sequence for ID generation. 
+            Primary keys are indexed by default in almost all SQL engines.
+    """
     id: Mapped[int] = mapped_column(Sequence('id_seq'), primary_key=True)
 
 
 class WithoutIndex(Base):
+    """
+    Represents a table with no optimizations on the 'data' column.
+    
+    This model serves as the 'Control' group. Any query filtering by 
+    the 'data' column will require the database to scan the table 
+    from top to bottom until the record is found.
+    """
     __tablename__ = 'without_index'
     data: Mapped[str] = mapped_column(String(50))
 
 
 class WithIndex(Base):
+    """
+    Represents a table with an explicit B-Tree index on the 'data' column.
+    
+    This model serves as the 'Experimental' group. Setting index=True 
+    tells the database to maintain a separate search structure for 
+    this column, optimizing lookups at the expense of slower writes.
+    """
     __tablename__ = 'with_index'
     data: Mapped[str] = mapped_column(String(50), index=True)
 

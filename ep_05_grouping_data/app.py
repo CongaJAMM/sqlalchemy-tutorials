@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# If there is data in the database, dont add more data
+# If there is data in the database, don't add more data
 if session.query(User).count() < 1:
     session.add(User(name='Iron Man', age=23))
     session.add(User(name='Coding Man', age=33))
@@ -26,6 +26,7 @@ print('\nGROUP BY (AGE,)')
 users_count_by_age = session.query(User.age).group_by(User.age).all()
 print(users_count_by_age)
 
+
 # ========================================================================================
 print('\nGROUP BY ADDITIONAL CRITERIA (AGE, COUNT)')
 # count the number of users by age
@@ -33,6 +34,7 @@ users_count_by_age = (
     session.query(User.age, func.count(User.id)).group_by(User.age).all()
 )
 print(users_count_by_age)
+
 
 # ========================================================================================
 print('\nCHAINING METHODS')
