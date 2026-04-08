@@ -1,10 +1,10 @@
 [tool.ruff]
+# Assume Python 3.12
 target-version = "py312"
 
 line-length = 120
 indent-width = 4
 
-[tool.ruff.lint]
 ignore = ["F821", "E402"]
 exclude = [
     "__init__.py",
@@ -37,9 +37,19 @@ exclude = [
 
 
 [tool.ruff.format]
+# Like Black, use double quotes for strings.
 quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
 indent-style = "space"
+
+# Enable/Disable auto-formatting of code examples in docstrings.
 docstring-code-format = false
-skip-magic-trailing-comma = false
-line-ending = "auto"
+
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
 docstring-code-line-length = "dynamic"
+
+skip-magic-trailing-comma = false
+
+line-ending = "auto"
