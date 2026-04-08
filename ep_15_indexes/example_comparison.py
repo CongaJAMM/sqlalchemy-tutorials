@@ -110,7 +110,7 @@ def insert_data(session: Session, model: WithoutIndex | WithIndex, num_rows: int
 
 def fetch_data(session: Session, model: WithoutIndex | WithIndex):
     start_time = time.perf_counter()
-    data = session.query(model).filter(model.data == 'data_5343').first()
+    _ = session.query(model).filter(model.data == 'data_5343').first()
     end_time = time.perf_counter()
     return round(end_time - start_time, 4)
 

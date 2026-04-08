@@ -1,0 +1,20 @@
+# For local development
+# Make sure when creating the environment you have installed conda
+# conda env create -f requirements.yaml
+# Use: "conda activate *Name of Env (ex. my_env)*" when running scripts in the terminal to activate the environment
+
+name: alc_env
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.12.12
+  - pip=26.0.1
+  - alembic=1.18.3  # For postgres database migrations cmd-tool
+  - sqlite>=3.0.1 # For the cmd line tool
+
+  - pip:
+    # sqlalchemy - Standard Database toolkit for SQL databases
+    - "sqlalchemy[aiosqlite]==2.0.48"  # SQLAlchemy download with additional aiosqlite drivers for asynchronous basics 

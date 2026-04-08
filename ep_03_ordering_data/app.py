@@ -4,6 +4,28 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=HY2GSa9aP_U
 
+"""
+SQLAlchemy Query Ordering: Sorting Data with order_by
+
+This module demonstrates how to control the sequence of records returned 
+from the database. Sorting is a critical aspect of data retrieval, 
+ensuring that results are presented in a logical and readable order.
+
+Key Architecture Features:
+1. Dynamic Data Population: Uses the 'random' module to generate a 
+   diverse dataset, providing a practical environment for testing 
+   sorting algorithms.
+2. Directional Sorting:
+   - ASC (Default): Arranges data from smallest to largest (e.g., 20 -> 60).
+   - DESC: Arranges data from largest to smallest (e.g., 60 -> 20).
+3. Multi-Level Ordering:
+   Demonstrates how to chain columns in 'order_by' to handle "ties." 
+   For example, if multiple users are 25 years old, they can be further 
+   sorted alphabetically by name.
+4. Python Object mapping: Shows that 'order_by' returns a list of 
+   fully-hydrated User objects in the requested sequence.
+"""
+
 import random  # NEW
 from models import User, engine
 from sqlalchemy.orm import sessionmaker

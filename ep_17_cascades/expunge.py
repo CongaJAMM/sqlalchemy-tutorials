@@ -38,7 +38,6 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy.orm.exc import DetachedInstanceError
 
 
 class Base(DeclarativeBase):

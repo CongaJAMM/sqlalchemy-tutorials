@@ -163,7 +163,7 @@ for post in recent_posts:
 
 
 # ==== WHERE IT IS CONSIDERED UNNECESSARY ====
-print(f"\n============================================================\n")
+print("\n============================================================\n")
 users = session.query(User).all()
 for user in users:
     print(user.name)

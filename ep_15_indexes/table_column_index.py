@@ -47,7 +47,7 @@ Key Concepts:
 # sqlalchemy.engine.Engine CREATE UNIQUE INDEX ix_users_email ON users (email)
 
 
-from sqlalchemy import create_engine, Index
+from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 engine = create_engine('sqlite:///:memory:', echo=True)

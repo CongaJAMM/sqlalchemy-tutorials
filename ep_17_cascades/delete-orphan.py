@@ -87,12 +87,12 @@ parent = Parent(children=[Child()])  # Setup a parent with a child
 session.add(parent) # Add the parent and child to the database
 session.commit()    # Save changes to the database
 
-print(f"\nThe created child:")
+print("\nThe created child:")
 print(session.query(Child).all())   # Should show the created child
 
 parent.children.clear()     # Deletes the parent's link to the child
 session.commit()
 
 
-print(f"\nIs child still here?")
+print("\nIs child still here?")
 print(session.query(Child).all())   # Should reflect that the created child is gone

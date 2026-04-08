@@ -4,7 +4,7 @@ Here will be a list of tutorials for anyone following along with my videos on ht
 
 * Used WSL Debian terminal
 
-* Used 'alc_env' conda environment from 'D:/sqlalchemy/setup`
+* Used `alc_env` conda environment from `./setup`
 
 ---
 

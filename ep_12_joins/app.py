@@ -154,7 +154,7 @@ print(result)
 result = (
     session.query(User, Address)
     .join(Address, full=True)
-    .filter(User.address is None, Address.user_id == None)
+    .filter(User.address is None, Address.user_id is None)
     .all()
 )
 print('\nANTI INNER JOIN - Inverse')
@@ -176,7 +176,7 @@ print(result)
 
 # ===== LEFT OUTER JOIN AKA  =====
 # Return all users that do not have an address
-result = session.query(User).outerjoin(Address).filter(User.address == None).all()
+result = session.query(User).outerjoin(Address).filter(User.address is None).all()
 
 print('\nLEFT OUTER JOIN: Users without an Address')
 print(result)
@@ -191,7 +191,7 @@ print(result)
 # ===== ANTI LEFT OUTER JOIN - Inverse =====
 # Return all users regardless if they have addresses or not
 result = (
-    session.query(User, Address).outerjoin(Address).filter(User.address == None).all()
+    session.query(User, Address).outerjoin(Address).filter(User.address is None).all()
 )
 print('\nANTI LEFT OUTER JOIN - Inverse')
 print(result)
@@ -208,7 +208,7 @@ print(result)
 # ===== ANTI RIGHT OUTER JOIN - Inverse =====
 # Return all addresses regardless if they have users or not
 result = (
-    session.query(Address, User).outerjoin(User).filter(Address.user_id == None).all()
+    session.query(Address, User).outerjoin(User).filter(Address.user_id is None).all()
 )
 print('\nANTI RIGHT OUTER JOIN - Inverse')
 print(result)

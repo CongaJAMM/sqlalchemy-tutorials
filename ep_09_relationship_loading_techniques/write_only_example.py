@@ -89,7 +89,7 @@ if session.query(User).count() < 1:
         [
             User(
                 name=f'User {y}',
-                logs=[Log(message=f'User did this thing') for x in range(3)],
+                logs=[Log(message='User did this thing') for x in range(3)],
             )
             for y in range(10)
         ]

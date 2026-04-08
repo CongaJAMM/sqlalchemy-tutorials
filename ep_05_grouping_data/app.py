@@ -4,8 +4,32 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=ftbYlej2xQY
 
+"""
+SQLAlchemy Aggregation: Grouping, Functions, and Dynamic Chaining
+
+This module demonstrates how to perform server-side data summaries using 
+SQL 'GROUP BY' and 'func' aggregates. It also highlights the power of 
+incremental query building for highly dynamic application logic.
+
+Key Architecture Features:
+1. SQL Aggregates (sqlalchemy.func):
+   Utilizes 'func.count' to perform calculations directly within the 
+   database engine, reducing the amount of data transferred to Python.
+2. The 'group_by' Clause:
+   Collapses multiple rows with the same value into single summary rows, 
+   allowing for statistical analysis (e.g., "How many users are age 25?").
+3. Method Chaining:
+   Shows how '.filter()', '.group_by()', and '.order_by()' can be 
+   interleaved. The order of these methods in Python creates a 
+   predictable and robust SQL execution plan.
+4. Conditional Query Building:
+   Demonstrates the 'Lazy Builder' pattern, where the final SQL query 
+   is assembled piece-by-piece using 'if' statements before the 
+   terminal '.all()' call is ever made.
+"""
+
 from models import User, engine
-from sqlalchemy import and_, func, not_, or_
+from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 
 Session = sessionmaker(bind=engine)
@@ -38,6 +62,16 @@ print(users_count_by_age)
 
 # ========================================================================================
 print('\nCHAINING METHODS')
+"""SQLAlchemy is smart enough to reorganize these into a valid SQL structure:
+
+FROM the table
+
+WHERE filters are applied
+
+GROUP BY the buckets
+
+ORDER BY the results
+"""
 users = session.query(User).filter(User.age > 24).filter(User.age < 50).all()
 
 for user in users:

@@ -4,6 +4,28 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=TWYurzVQCwg
 
+"""
+SQLAlchemy Query Filtering: Advanced Logical Predicates
+
+This module demonstrates the various methods used to narrow down database 
+results. It highlights the differences between legacy 'filter' methods and 
+modern 'where' clauses, while implementing complex Boolean logic.
+
+Key Architecture Features:
+1. filter() vs. filter_by():
+   - filter(): Flexible, allows Pythonic expressions (e.g., User.age >= 25).
+   - filter_by(): Simple, keyword-based equality only (e.g., age=30).
+2. Modern 'where' Syntax: Utilizes the SQLAlchemy 2.0 style 'where' method, 
+   which is functionally equivalent to 'filter' but aligns with standard 
+   SQL terminology.
+3. Logical Operators:
+   - and_ / or_ / not_: Function-based wrappers for Boolean logic.
+   - Bitwise Operators: Shows the use of '|' (OR), '&' (AND), and '~' (NOT) 
+     as shorthand for logical expressions.
+4. Composite Filtering: Demonstrates nesting logical operators to build 
+   highly specific queries (e.g., NOT this OR (this AND that)).
+"""
+
 from models import User, engine
 from sqlalchemy import and_, not_, or_
 from sqlalchemy.orm import sessionmaker

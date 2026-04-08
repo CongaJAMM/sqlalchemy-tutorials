@@ -4,6 +4,37 @@
 # =============================================================
 # Related Video: https://www.youtube.com/watch?v=f0-kEG37GE0
 
+"""
+SQLAlchemy ORM Operations: The CRUD Lifecycle and Session Management
+
+This module demonstrates how to interact with database records using the 
+SQLAlchemy Session. It covers the fundamental persistence operations and 
+provides a deep dive into how Query objects behave before execution.
+
+Key Architecture Features:
+1. Session Factory (sessionmaker):
+   Establishes a 'Session' factory bound to the engine. The Session acts 
+   as a "Unit of Work," tracking changes to objects and managing 
+   database transactions.
+
+2. CRUD Operations:
+   - Create: Using 'session.add()' and 'session.add_all()' to move transient 
+     objects into the session.
+   - Read: Using 'session.query()' to retrieve data with various filters.
+   - Update: Modifying Python object attributes; the Session detects these 
+     changes automatically (Dirty Tracking).
+   - Delete: Using 'session.delete()' to mark records for removal.
+
+3. Transaction Control:
+   Demonstrates the importance of 'session.commit()' to persist changes 
+   permanently to the disk, and implicit flushing of data.
+
+4. The Query Object & Lazy Execution:
+   Explains that 'session.query(User)' creates a SQL builder (Query object) 
+   rather than executing a command immediately. SQL is only emitted when 
+   a 'terminal method' (like .all(), .first(), or .count()) is called.
+"""
+
 from models import User, engine
 from sqlalchemy.orm import sessionmaker
 
@@ -77,7 +108,7 @@ session.commit()
 
 # ===================================================================================
 # QUERY OBJECT
-print(f"\n\nUnderstanding the QUERY OBJECT:")
+print("\n\nUnderstanding the QUERY OBJECT:")
 users = session.query(User)   # This does NOT query/hit the database yet.
     # It returns a Query object (a lazy SQL builder).
 
